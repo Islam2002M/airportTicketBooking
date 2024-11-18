@@ -1,0 +1,5 @@
+BookingNumber,FlightId,DepartureCountry,DestinationCountry,DepartureDate,DepartureAirport,ArrivalAirport,PassengerID,Class,Status,Price
+1,1001,USA,Canada,11/05/2024 12:30:00,JFK,YVR,101,Economy,Canceled,300
+2,1002,UK,France,11/05/2024 13:15:00,LHR,CDG,102,Business,Confirmed,500
+3,1003,Japan,Australia,11/06/2024 10:45:00,NRT,SYD,101,First Class,Canceled,1000
+1147182909,231600382,UK,France,11/20/2024 15:00:00,CDG,HND,101,Economy,Pending,90
