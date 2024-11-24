@@ -98,5 +98,35 @@ namespace airportTicketBooking
 
 
         }
+        public void ChangeBookingStatus(int bookingId,string status)
+        {
+            List<Booking> bookingList = bookings.GetBookings();
+            var tempBook = bookingList.SingleOrDefault(book => book.BookingNumber == bookingId);
+            if (tempBook != null)
+            {
+                tempBook.Status = status;
+                bookings.SaveBookings(bookingList);
+                Console.WriteLine($@"status changes to {status} successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Booking not found");
+            }
+        }
+        public void ChangeBookingType(int bookingId,string classs)
+        {
+            List<Booking> bookingList = bookings.GetBookings();
+            var tempBook = bookingList.SingleOrDefault(book => book.BookingNumber == bookingId);
+            if (tempBook != null)
+            {
+                tempBook.Class = classs;
+                bookings.SaveBookings(bookingList);
+                Console.WriteLine($@"class changes to {classs} successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Booking not found");
+            }
+        } 
     }
 }

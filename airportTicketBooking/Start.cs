@@ -108,9 +108,11 @@ namespace airportTicketBooking
                                     manageBookings.CancelBooking(cancelId);
                                     break;
                                 case 3:
+                                    string[] availabilStatus = { "Pending", "Confirmed", "Canceled" };
+                                    string[] availabilType = { "Business", "Economy", "FirstClass" };
                                     Console.WriteLine("Enter the passenger ID:");
                                     int.TryParse(Console.ReadLine(), out var passengerId);
-                                    List<Booking> personalBookings = manageBookings.ViewPersonalBookings(passengerId);
+                                    var personalBookings = manageBookings.ViewPersonalBookings(passengerId);
                                     if (personalBookings == null || personalBookings.Count == 0)
                                     {
                                         Console.WriteLine("No bookings found for this passenger ID.");
@@ -118,27 +120,57 @@ namespace airportTicketBooking
                                     }
 
                                     foreach (var booking in personalBookings)
-                                    {
                                         Console.WriteLine(
                                             $"Booking Detail: {booking.BookingNumber}, Flight: {booking.FlightId}, Passenger ID: {booking.PassengerID}, Departure Date: {booking.DepartureDate}, Status: {booking.Status}");
-                                    }
 
-                                    Console.WriteLine(
-                                        "Which booking do you want to modify? Enter its ID to confirm it:");
-                                    int.TryParse(Console.ReadLine(), out int bookingId);
-                                    Booking bookingToModify = manageBookings.FilterBookings(bookingId, null, null, null,
-                                        null, null, null, null, null, null).First();
-                                    if (bookingToModify == null)
+                                    Console.WriteLine("Which booking do you want to modify its status? Enter its ID:");
+                                    int.TryParse(Console.ReadLine(), out var bookingId);
+                                    Console.WriteLine("Choose what you want to do:");
+                                    Console.WriteLine("1. change the status of a booking ");
+                                    Console.WriteLine("2. change the class of a booking");
+                                    Console.Write("Enter choice: ");
+                                    if (!int.TryParse(Console.ReadLine(), out var choiceee))
                                     {
-                                        Console.WriteLine("Invalid booking ID. No booking found.");
+                                        Console.WriteLine("Invalid choice.");
                                         return;
                                     }
 
-                                    bookingToModify.Status = "Confirmed";
-                                    Console.WriteLine("Booking confirmed successfully.");
-                                    break;
-                                default:
-                                    Console.WriteLine("Invalid choice. No action taken.");
+                                    switch (choiceee)
+                                    {
+                                        case 1:
+                                            Console.WriteLine("Enter the new status (Pending, Confirmed, Canceled):");
+                                            while (true)
+                                            {
+                                                var status = Console.ReadLine();
+
+                                                if (availabilStatus.Contains(status, StringComparer.OrdinalIgnoreCase))
+                                                {
+                                                    manageBookings.ChangeBookingStatus(bookingId, status);
+                                                    break;
+                                                }
+
+                                                Console.WriteLine("Invalid status. Please enter a valid status.");
+                                            }
+
+                                            break;
+                                        case 2:
+
+                                            Console.WriteLine("Enter the new class (Business, Economy, FirstClass):");
+                                            while (true)
+                                            {
+                                                var type = Console.ReadLine();
+                                                if (availabilType.Contains(type, StringComparer.OrdinalIgnoreCase))
+                                                {
+                                                    manageBookings.ChangeBookingType(bookingId, type);
+                                                    break;
+                                                }
+
+                                                Console.WriteLine("Invalid type. Please enter a valid type.");
+                                            }
+
+                                            break;
+                                    }
+
                                     break;
                             }
 
@@ -177,8 +209,8 @@ namespace airportTicketBooking
 
             Console.Write("Departure Date (press Enter to skip): ");
             var depDateInput = Console.ReadLine();
-            DateTime? depDate = string.IsNullOrWhiteSpace(depDateInput) ? (DateTime?)null : DateTime.Parse(depDateInput);
-            
+            var depDate = string.IsNullOrWhiteSpace(depDateInput) ? (DateTime?)null : DateTime.Parse(depDateInput);
+
             Console.Write("Airline (press Enter to skip): ");
             var DepartureAirportInput = Console.ReadLine();
             var DepartureAirport = string.IsNullOrWhiteSpace(DepartureAirportInput) ? null : DepartureAirportInput;
@@ -193,15 +225,16 @@ namespace airportTicketBooking
 
             Console.Write("Price Range (press Enter to skip): ");
             var priceRangeInput = Console.ReadLine();
-            decimal? priceRange = string.IsNullOrWhiteSpace(priceRangeInput) ? (decimal?)null : decimal.Parse(priceRangeInput);
+            var priceRange = string.IsNullOrWhiteSpace(priceRangeInput)
+                ? (decimal?)null
+                : decimal.Parse(priceRangeInput);
 
-            var flights = manageFlights.FilterFlights(priceRange, depCountry, destCountry, depDate, DepartureAirport,ArrivalAirport,flightClass);
+            var flights = manageFlights.FilterFlights(priceRange, depCountry, destCountry, depDate, DepartureAirport,
+                ArrivalAirport, flightClass);
 
             foreach (var flight in flights)
-            {
-                Console.WriteLine($"Flight Number: {flight.FlightNumber}, Flight from {flight.DepartureCountry} to {flight.ArrivalCountry} on {flight.DepartureDate}");
-            }
-
+                Console.WriteLine(
+                    $"Flight Number: {flight.FlightNumber}, Flight from {flight.DepartureCountry} to {flight.ArrivalCountry} on {flight.DepartureDate}");
         }
     }
 }
