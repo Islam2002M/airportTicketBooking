@@ -1,2 +1,12 @@
 .idea
 .sln
+bin/
+obj/
+.DS_Store
+.user
+.suo
+.log
+.tmp
+.cache
+.iml
+out/
