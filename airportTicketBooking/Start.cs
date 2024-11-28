@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace airportTicketBooking
@@ -42,18 +43,25 @@ namespace airportTicketBooking
                     switch (choice)
                     {
                         case 1:
+                            //filter bookings
                             var bookings = manageBookings.FilterBookings(null, null, null, null, null, null, null, null,
                                 null, "Canceled");
                             foreach (var booking in bookings)
-                                Console.WriteLine(
-                                    $"Booking Detail: Flight {booking.FlightId}, Passenger ID: {booking.PassengerID}, Departure Date: {booking.DepartureDate}, Status: {booking.Status}");
+                                Console.WriteLine($"Booking Detail: Flight {booking.FlightId}, Passenger ID: {booking.PassengerId}, Departure Date: {booking.DepartureDate}, Status: {booking.Status}");
                             break;
                         case 2:
+                            //batch from file
                             Console.WriteLine("Enter the file path you want to batch from it");
                             var path = Console.ReadLine();
+                            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+                            {
+                                Console.WriteLine("Invalid file path. Please try again.");
+                                return;
+                            }
                             var errors = ValidateFileRecords.ValidateFileRecordss(path);
-                            Console.WriteLine(errors.Count);
-                            foreach (var error in errors) Console.WriteLine(error);
+                            if(errors.Count!=0);
+                              foreach (var error in errors) 
+                                     Console.WriteLine(error);
                             break;
                         case 3:
                             Console.WriteLine("Exiting Manager menu.");
@@ -66,9 +74,11 @@ namespace airportTicketBooking
                     switch (choice)
                     {
                         case 1:
+                            //search for flight
                             Case1();
                             break;
                         case 2:
+                            //book flight
                             Console.WriteLine("Enter your ID");
                             int.TryParse(Console.ReadLine(), out var passengerID);
                             Case1();
@@ -85,6 +95,7 @@ namespace airportTicketBooking
                             manageBookings.BookAFlight(flightID, @class, passengerID);
                             break;
                         case 3:
+                            //manage booking
                             Console.WriteLine("Choose what you want to do:");
                             Console.WriteLine("1. View personal bookings");
                             Console.WriteLine("2. Cancel a booking");
@@ -120,8 +131,7 @@ namespace airportTicketBooking
                                     }
 
                                     foreach (var booking in personalBookings)
-                                        Console.WriteLine(
-                                            $"Booking Detail: {booking.BookingNumber}, Flight: {booking.FlightId}, Passenger ID: {booking.PassengerID}, Departure Date: {booking.DepartureDate}, Status: {booking.Status}");
+                                        Console.WriteLine($"Booking Detail: {booking.BookingNumber}, Flight: {booking.FlightId}, Passenger ID: {booking.PassengerId}, Departure Date: {booking.DepartureDate}, Status: {booking.Status}");
 
                                     Console.WriteLine("Which booking do you want to modify its status? Enter its ID:");
                                     int.TryParse(Console.ReadLine(), out var bookingId);
@@ -151,10 +161,8 @@ namespace airportTicketBooking
 
                                                 Console.WriteLine("Invalid status. Please enter a valid status.");
                                             }
-
                                             break;
                                         case 2:
-
                                             Console.WriteLine("Enter the new class (Business, Economy, FirstClass):");
                                             while (true)
                                             {
@@ -187,14 +195,15 @@ namespace airportTicketBooking
 
         public static void Case1Excution()
         {
-            List<Booking> bookings = null;
+            List<Booking> bookings;
             Console.Write("Enter Passenger number: ");
             int.TryParse(Console.ReadLine(), out var passengerNum);
             {
                 bookings = manageBookings.ViewPersonalBookings(passengerNum);
             }
             foreach (var book in bookings)
-                Console.WriteLine($"{book.BookingNumber} {book.FlightId} to {book.Price} on {book.DepartureDate}");
+                Console.WriteLine($"Booking #{book.BookingNumber}: Flight ID {book.FlightId}, Price: ${book.Price:F2}, Departure Date: {book.DepartureDate:yyyy-MM-dd}");
+
         }
 
         private static void Case1()
@@ -233,8 +242,7 @@ namespace airportTicketBooking
                 ArrivalAirport, flightClass);
 
             foreach (var flight in flights)
-                Console.WriteLine(
-                    $"Flight Number: {flight.FlightNumber}, Flight from {flight.DepartureCountry} to {flight.ArrivalCountry} on {flight.DepartureDate}");
+                Console.WriteLine($"Flight Number: {flight.FlightNumber}, Flight from {flight.DepartureCountry} to {flight.ArrivalCountry} on {flight.DepartureDate}");
         }
     }
 }

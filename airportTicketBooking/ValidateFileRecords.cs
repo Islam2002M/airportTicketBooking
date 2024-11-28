@@ -15,7 +15,7 @@ namespace airportTicketBooking
             List<string> errors = new List<string>(); 
             foreach (var flight in records)
             {
-                var error = validateFlight(flight);
+                var error = ValidateFlight(flight);
                 if (error != null && error.Count > 0)
                 {
                     errors.Add($"Errors in Flight {flight.FlightNumber}:");
@@ -27,23 +27,23 @@ namespace airportTicketBooking
             {
                 foreach (var flight in records)
                 {
-                    Guid newGuid = Guid.NewGuid();
-                    int bookingId = BitConverter.ToInt32(newGuid.ToByteArray(), 0);
-                    flight.FlightNumber = bookingId; 
+                    Guid flightId = Guid.NewGuid();
+                    int flightIdInt = BitConverter.ToInt32(flightId.ToByteArray(), 0);
+                    flight.FlightNumber = flightIdInt; 
 
                     using (StreamWriter writer = new StreamWriter(flightsPath, append: true))
                     {
-                        writer.WriteLine($"{bookingId},{flight.DepartureCountry},{flight.ArrivalCountry},{flight.DepartureDate},{flight.DepartureAirport},{flight.ArrivalAirport},{flight.Class},{flight.Price}");
+                        writer.WriteLine($"{flightIdInt},{flight.DepartureCountry},{flight.ArrivalCountry},{flight.DepartureDate},{flight.DepartureAirport},{flight.ArrivalAirport},{flight.Class},{flight.Price}");
                     }
                 }
 
-                Console.WriteLine("Data saved to CSV file at: " + filePath);
+                Console.WriteLine("There is No errors in the data , Data saved to CSV file at: " + filePath);
             }
 
             return errors;
         }
 
-        private List<string> validateFlight(Flight flight)
+        private List<string> ValidateFlight(Flight flight)
         {
             var errors = new List<string>();
             if (string.IsNullOrEmpty(flight.DepartureCountry))
@@ -60,7 +60,7 @@ namespace airportTicketBooking
 
             if (flight.DepartureDate < DateTime.Now)
                 errors.Add("Departure date cannot be earlier than today");
-
+            
             if (string.IsNullOrEmpty(flight.DepartureAirport))
                 errors.Add("Departure airport is required");
 

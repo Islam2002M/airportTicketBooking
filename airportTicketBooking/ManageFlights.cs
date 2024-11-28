@@ -7,13 +7,12 @@ namespace airportTicketBooking
 {
     public class ManageFlights
     {
-        private FlightRep flights = new();
+        private readonly FlightRep _flights = new();
 
         public List<Flight> FilterFlights(decimal? price, string departureCountry, string destinationCountry,
             DateTime? departureDate, string departureAirport, string arrivalAirport, string @class)
         {
-            var f = flights.GetFlights(
-                @"C:\Users\msi\RiderProjects\airportTicketBooking\airportTicketBooking\data\flights.csv");
+            var f = _flights.GetFlights(@"C:\Users\msi\RiderProjects\airportTicketBooking\airportTicketBooking\data\flights.csv");
             return f.Where(ele =>
                     (ele.DepartureAirport == departureAirport || string.IsNullOrEmpty(departureAirport)) &&
                     (ele.DepartureCountry == departureCountry || string.IsNullOrEmpty(departureCountry)) &&
@@ -27,9 +26,7 @@ namespace airportTicketBooking
 
         public Flight GetFlightById(int flightId)
         {
-            var f =
-                flights.GetFlights(
-                    @"C:\Users\msi\RiderProjects\airportTicketBooking\airportTicketBooking\data\flights.csv");
+            var f = _flights.GetFlights(@"C:\Users\msi\RiderProjects\airportTicketBooking\airportTicketBooking\data\flights.csv");
             return f.FirstOrDefault(ele => ele.FlightNumber == flightId);
         }
     }

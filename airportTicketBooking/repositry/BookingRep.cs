@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using CsvHelper;
-using CsvHelper.Configuration;
 
 namespace airportTicketBooking.repositry
 {
@@ -14,15 +13,34 @@ namespace airportTicketBooking.repositry
 
         public List<Booking> GetBookings()
         {
-            using var reader = new StreamReader(BookingsFilePath);
-            using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture));
-            return csv.GetRecords<Booking>().ToList();
+            if (!File.Exists(BookingsFilePath)) 
+                throw new FileNotFoundException($"File {BookingsFilePath} not found");
+            try
+            {
+                using var reader = new StreamReader(BookingsFilePath);
+                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+                return csv.GetRecords<Booking>().ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new List<Booking>();
+            }
         }
+
         public void SaveBookings(List<Booking> bookingList)
         {
-            using var writer = new StreamWriter(BookingsFilePath);
-            using var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture));
-            csv.WriteRecords(bookingList);
+            if (!File.Exists(BookingsFilePath)) throw new FileNotFoundException($"File {BookingsFilePath} not found");
+            try
+            {
+                using var writer = new StreamWriter(BookingsFilePath);
+                using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+                csv.WriteRecords(bookingList);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }
