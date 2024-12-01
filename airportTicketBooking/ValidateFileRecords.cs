@@ -29,6 +29,7 @@ namespace airportTicketBooking
                 {
                     Guid flightId = Guid.NewGuid();
                     int flightIdInt = BitConverter.ToInt32(flightId.ToByteArray(), 0);
+                    if (flightIdInt < 0) flightIdInt = ~ flightIdInt;
                     flight.FlightNumber = flightIdInt; 
 
                     using (StreamWriter writer = new StreamWriter(flightsPath, append: true))
@@ -69,10 +70,10 @@ namespace airportTicketBooking
 
             if (flight.ArrivalAirport == flight.DepartureAirport)
                 errors.Add("Arrival airport cannot be the same as Departure airport");
-
-            if (string.IsNullOrEmpty(flight.Class))
-                errors.Add("Flight class is required");
-
+            
+            if (string .IsNullOrEmpty(flight.Class))
+                errors.Add("Class is required");
+            
             if (flight.Price <= 0)
                 errors.Add("Flight price should be greater than 0");
 

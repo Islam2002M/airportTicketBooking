@@ -14,18 +14,9 @@ namespace airportTicketBooking
         public int PassengerId { get; set; }
         public string Class { get; set; }
         public string Status { get; set; }
-        public decimal Price { get; private set; }
+        public decimal Price { get;  set; }
 
-        public Booking()
-        {
-            Setprice();
-        }
-
-        private void Setprice()
-        {
-            if (Class == "Economy") Price = 200;
-            else if (Class == "Business") Price = 300;
-            else if (Class == "First Class") Price = 400;
-        }
+       
+        
     }
 }

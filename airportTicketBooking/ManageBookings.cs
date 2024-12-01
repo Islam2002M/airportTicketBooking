@@ -16,20 +16,23 @@ namespace airportTicketBooking
             int? passengerId, string @class, string status)
         {
             List<Booking> bookingList = _bookings.GetBookings();
-            return bookingList.Where(book => (book.Price == price || !price.HasValue) &&
-                                             (book.DepartureCountry == departureCountry ||
-                                              string.IsNullOrEmpty(departureCountry)) &&
-                                             (book.DepartureDate == departureDate || !departureDate.HasValue) &&
-                                             (book.FlightId == flightId || !flightId.HasValue) &&
-                                             (book.DestinationCountry == destinationCountry ||
-                                              string.IsNullOrEmpty(destinationCountry)) &&
-                                             (book.DepartureAirport == departureAirport ||
-                                              string.IsNullOrEmpty(departureAirport)) &&
-                                             (book.ArrivalAirport == arrivalAirport ||
-                                              string.IsNullOrEmpty(arrivalAirport)) &&
-                                             (book.PassengerId == passengerId || !passengerId.HasValue) &&
-                                             (book.Status == status || string.IsNullOrEmpty(status)) &&
-                                             (book.Class == @class || string.IsNullOrEmpty(@class))).ToList();
+            return bookingList.Where(book =>
+                (book.Price == price || !price.HasValue) &&
+                (string.Equals(book.DepartureCountry, departureCountry, StringComparison.OrdinalIgnoreCase) ||
+                 string.IsNullOrEmpty(departureCountry)) &&
+                (book.DepartureDate == departureDate || !departureDate.HasValue) &&
+                (book.FlightId == flightId || !flightId.HasValue) &&
+                (string.Equals(book.DestinationCountry, destinationCountry, StringComparison.OrdinalIgnoreCase) ||
+                 string.IsNullOrEmpty(destinationCountry)) &&
+                (string.Equals(book.DepartureAirport, departureAirport, StringComparison.OrdinalIgnoreCase) ||
+                 string.IsNullOrEmpty(departureAirport)) &&
+                (string.Equals(book.ArrivalAirport, arrivalAirport, StringComparison.OrdinalIgnoreCase) ||
+                 string.IsNullOrEmpty(arrivalAirport)) &&
+                (book.PassengerId == passengerId || !passengerId.HasValue) &&
+                (string.Equals(book.Status, status, StringComparison.OrdinalIgnoreCase) ||
+                 string.IsNullOrEmpty(status)) &&
+                (string.Equals(book.Class, @class, StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(@class))
+            ).ToList();
         }
 
         public List<Booking> ViewPersonalBookings(int passengerId)
@@ -67,6 +70,8 @@ namespace airportTicketBooking
 
             Guid flightNumber = Guid.NewGuid();
             int flightNumberAsInt = BitConverter.ToInt32(flightNumber.ToByteArray(), 0);
+            flightNumberAsInt = flightNumberAsInt < 0 ? ~flightNumberAsInt + 1 : flightNumberAsInt;
+
             var booking = new Booking
             {
                 BookingNumber = flightNumberAsInt,
@@ -79,6 +84,7 @@ namespace airportTicketBooking
                 PassengerId = passengerId,
                 Status = "Pending",
                 Class = @class,
+                Price = Flight.calculateprice(@class)
             };
             string bookingFilePath = @"C:\Users\msi\RiderProjects\airportTicketBooking\airportTicketBooking\data\booking.csv";
             try
