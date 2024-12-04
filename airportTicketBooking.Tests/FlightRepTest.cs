@@ -13,14 +13,14 @@ namespace airportTicketBooking.Tests
 {
     public class FlightRepTests
     {
-        private readonly FlightRep _flightRep;
-       
         [Fact]
         public void GetFlights_FileDoesNotExist_ThrowsFileNotFoundException()
         {
-            string filePath = "nonexistentfile.csv";
+            var fileWrapper = new Mock<IFileWrapper>();
+            var stub = new FlightRep(fileWrapper.Object);
+            fileWrapper.Setup(x => x.Exists(It.IsAny<string>())).Returns(false);
 
-            var exception = Assert.Throws<FileNotFoundException>(() => _flightRep.GetFlights(filePath));
+            var exception = Assert.Throws<FileNotFoundException>(() => stub.GetFlights("dosen'texist.csv"));
             Assert.Equal("Could not find file", exception.Message);
         }
 
@@ -29,11 +29,5 @@ namespace airportTicketBooking.Tests
         {
             
         }
-
-       
     }
-    
-
-    
-   
 }
