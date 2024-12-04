@@ -33,11 +33,8 @@ namespace airportTicketBooking.Tests
             var fixture = new Fixture();
             var flights = fixture.CreateMany<Flight>(3).ToList();
 
-            var csvContent =
-                "FlightNumber,DepartureCountry,ArrivalCountry,DepartureDate,DepartureAirport,ArrivalAirport,Price,Class\n" +
-                string.Join("\n",
-                    flights.Select(f =>
-                        $"{f.FlightNumber},{f.DepartureCountry},{f.ArrivalCountry},{f.DepartureDate:O},{f.DepartureAirport},{f.ArrivalAirport},{f.Price},{f.Class}"));
+            var csvContent = "FlightNumber,DepartureCountry,ArrivalCountry,DepartureDate,DepartureAirport,ArrivalAirport,Price,Class\n" +
+                             string.Join("\n", flights.Select(f => $"{f.FlightNumber},{f.DepartureCountry},{f.ArrivalCountry},{f.DepartureDate},{f.DepartureAirport},{f.ArrivalAirport},{f.Price},{f.Class}"));
 
             var memoryStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(csvContent));
             var streamReader = new StreamReader(memoryStream);
