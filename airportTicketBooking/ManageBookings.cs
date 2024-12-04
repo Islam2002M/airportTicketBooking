@@ -10,7 +10,7 @@ namespace airportTicketBooking
     {
         static FileWrapper fileWrapper = new FileWrapper();
         static FlightRep flightRep = new FlightRep(fileWrapper);
-        private readonly BookingRep _bookings = new BookingRep();
+        private readonly BookingRep _bookings = new BookingRep(fileWrapper);
         private readonly ManageFlights _manageFlights = new ManageFlights(flightRep);
 
         public List<Booking> FilterBookings(int? flightId, decimal? price, string departureCountry,

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.IO;
 using System.Linq;
 using airportTicketBooking.repositry;
 using Moq;
 using Xunit;
 using AutoFixture;
-using CsvHelper;
-using CsvHelper.Configuration;
 
 namespace airportTicketBooking.Tests
 {

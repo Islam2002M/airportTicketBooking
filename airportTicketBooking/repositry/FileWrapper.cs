@@ -6,6 +6,7 @@ namespace airportTicketBooking.repositry
     {
         public bool Exists(string filePath)=>File.Exists(filePath);
         public StreamReader OpenFile(string filePath)=>new StreamReader(filePath);
+        public StreamWriter CreateFile(string filePath)=>new StreamWriter(filePath);
         
     }
     
