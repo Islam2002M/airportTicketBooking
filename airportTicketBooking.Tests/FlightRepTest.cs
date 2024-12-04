@@ -1,22 +1,39 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using airportTicketBooking.repositry;
 using Moq;
 using Xunit;
+using AutoFixture;
+using CsvHelper;
+using CsvHelper.Configuration;
 
 namespace airportTicketBooking.Tests
 {
-    public class FlightRepTest
+    public class FlightRepTests
     {
-        private const string MockFilePath = @"mockPath.csv";
+        private readonly FlightRep _flightRep;
+       
+        [Fact]
+        public void GetFlights_FileDoesNotExist_ThrowsFileNotFoundException()
+        {
+            string filePath = "nonexistentfile.csv";
+
+            var exception = Assert.Throws<FileNotFoundException>(() => _flightRep.GetFlights(filePath));
+            Assert.Equal("Could not find file", exception.Message);
+        }
 
         [Fact]
-        public void GetFlights_ShouldReturnFlights()
+        public void GetFlights_ValidCsvFile_ReturnsListOfFlights()
         {
-            var mockReader = new Mock<TextReader>();
-            mockReader.SetupSequence(r => r.ReadLine())
-                .Returns((string)null);
-
-            var bookingRep = new BookingRep();
+            
         }
+
+       
     }
+    
+
+    
+   
 }

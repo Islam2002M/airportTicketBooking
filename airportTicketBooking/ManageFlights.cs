@@ -7,8 +7,12 @@ namespace airportTicketBooking
 {
     public class ManageFlights
     {
-        private readonly FlightRep _flights = new();
+        private readonly FlightRep _flights;
 
+        public ManageFlights(FlightRep flights)
+        {
+            _flights=flights;
+        }
         public List<Flight> FilterFlights(decimal? price, string departureCountry, string destinationCountry,
             DateTime? departureDate, string departureAirport, string arrivalAirport,string flightClass)
         {

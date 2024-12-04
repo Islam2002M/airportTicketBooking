@@ -10,27 +10,34 @@ namespace airportTicketBooking.repositry
 {
     public class FlightRep
     {
+        private IFileWrapper _fileWrapper;
+        public FlightRep(IFileWrapper fileWrapper)
+        {
+            _fileWrapper = fileWrapper;
+        }
         public List<Flight> GetFlights(string flightsFilePath)
         {
-            if (!File.Exists(flightsFilePath)) 
-                throw new FileNotFoundException();
+            if (!_fileWrapper.Exists(flightsFilePath)) 
+                throw new FileNotFoundException("Could not find file");
+
             try
             {
                 var config = new CsvConfiguration(CultureInfo.InvariantCulture)
                 {
-                    MissingFieldFound = null, HeaderValidated = null
+                    MissingFieldFound = null,
+                    HeaderValidated = null
                 };
 
-                using var reader = new StreamReader(flightsFilePath);
-                using var csv = new CsvReader(reader, config);
-
+                using var reader = _fileWrapper.OpenFile(flightsFilePath);
+                using var csv = new CsvReader(reader, config); 
                 return csv.GetRecords<Flight>().ToList();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine($"Error reading CSV file: {e.Message}");
                 return new List<Flight>();
             }
         }
+
     }
 }

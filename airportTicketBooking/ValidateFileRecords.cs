@@ -7,9 +7,11 @@ namespace airportTicketBooking
 {
     public class ValidateFileRecords
     {
+        
         public List<string> ValidateFileRecordss(string filePath)
         {
-            FlightRep flightRep = new FlightRep();
+            FileWrapper file = new FileWrapper();
+            FlightRep flightRep = new FlightRep(file);
             string flightsPath=@"C:\Users\msi\RiderProjects\airportTicketBooking\airportTicketBooking\data\flights.csv";
             List<Flight> records = flightRep.GetFlights(filePath);
             List<string> errors = new List<string>(); 

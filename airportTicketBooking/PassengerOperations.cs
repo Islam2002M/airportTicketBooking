@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using airportTicketBooking.repositry;
 
 namespace airportTicketBooking
 {
     public class PassengerOperations : IUserOperations
     {
+        static FileWrapper fileWrapper = new FileWrapper();
+        static FlightRep flightRep = new FlightRep(fileWrapper);
+        
         private readonly ManageBookings manageBookings = new();
-        private readonly ManageFlights manageFlights = new();
+        private readonly ManageFlights manageFlights = new(flightRep);
         private int bookingId;
 
         public void List()
