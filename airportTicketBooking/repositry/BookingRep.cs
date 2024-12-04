@@ -9,16 +9,15 @@ namespace airportTicketBooking.repositry
 {
     public class BookingRep
     {
-        private const string BookingsFilePath = @"C:\Users\msi\RiderProjects\airportTicketBooking\airportTicketBooking\data\booking.csv";
         private IFileWrapper _fileWrapper;
 
         public BookingRep(IFileWrapper fileWrapper)
         {
-            _fileWrapper = new FileWrapper();
+            _fileWrapper = fileWrapper;
         }
-        public List<Booking> GetBookings()
+        public List<Booking> GetBookings(string BookingsFilePath)
         {
-            if (_fileWrapper.Exists(BookingsFilePath)) 
+            if (!_fileWrapper.Exists(BookingsFilePath)) 
                 throw new FileNotFoundException($"File not found");
             try
             {
@@ -33,7 +32,7 @@ namespace airportTicketBooking.repositry
             }
         }
 
-        public void SaveBookings(List<Booking> bookingList)
+        public void SaveBookings(List<Booking> bookingList,string BookingsFilePath)
         {
             if (!_fileWrapper.Exists(BookingsFilePath)) 
                 throw new FileNotFoundException($"File not found");

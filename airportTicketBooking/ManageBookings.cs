@@ -12,12 +12,14 @@ namespace airportTicketBooking
         static FlightRep flightRep = new FlightRep(fileWrapper);
         private readonly BookingRep _bookings = new BookingRep(fileWrapper);
         private readonly ManageFlights _manageFlights = new ManageFlights(flightRep);
+        private const string BookingsFilePath = @"C:\Users\msi\RiderProjects\airportTicketBooking\airportTicketBooking\data\booking.csv";
+
 
         public List<Booking> FilterBookings(int? flightId, decimal? price, string departureCountry,
             string destinationCountry, DateTime? departureDate, string departureAirport, string arrivalAirport,
             int? passengerId, string @class, string status)
         {
-            List<Booking> bookingList = _bookings.GetBookings();
+            List<Booking> bookingList = _bookings.GetBookings(BookingsFilePath);
             return bookingList.Where(book =>
                 (book.Price == price || !price.HasValue) &&
                 (string.Equals(book.DepartureCountry, departureCountry, StringComparison.OrdinalIgnoreCase) ||
@@ -39,7 +41,7 @@ namespace airportTicketBooking
 
         public List<Booking> ViewPersonalBookings(int passengerId)
         {
-            List<Booking> bookingList = _bookings.GetBookings();
+            List<Booking> bookingList = _bookings.GetBookings(BookingsFilePath);
             var personalBookings = bookingList.Where(booking => booking.PassengerId == passengerId).ToList();
             Console.WriteLine($"Found {personalBookings.Count} bookings for Passenger ID: {passengerId}");
             return personalBookings;
@@ -47,12 +49,12 @@ namespace airportTicketBooking
 
         public void CancelBooking(int bookingId)
         {
-            List<Booking> bookingList = _bookings.GetBookings();
+            List<Booking> bookingList = _bookings.GetBookings(BookingsFilePath);
             var tempBook = bookingList.SingleOrDefault(book => book.BookingNumber == bookingId);
             if (tempBook != null)
             {
                 tempBook.Status = "Canceled";
-                _bookings.SaveBookings(bookingList);
+                _bookings.SaveBookings(bookingList,BookingsFilePath);
                 Console.WriteLine("Booking canceled");
             }
             else
@@ -105,12 +107,12 @@ namespace airportTicketBooking
 
         public void ChangeBookingStatus(int bookingId, string status)
         {
-            List<Booking> bookingList = _bookings.GetBookings();
+            List<Booking> bookingList = _bookings.GetBookings(BookingsFilePath);
             var tempBook = bookingList.SingleOrDefault(book => book.BookingNumber == bookingId);
             if (tempBook != null)
             {
                 tempBook.Status = status;
-                _bookings.SaveBookings(bookingList);
+                _bookings.SaveBookings(bookingList,BookingsFilePath);
                 Console.WriteLine($@"status changes to {status} successfully.");
             }
             else
@@ -121,12 +123,12 @@ namespace airportTicketBooking
 
         public void ChangeBookingType(int bookingId, string classs)
         {
-            List<Booking> bookingList = _bookings.GetBookings();
+            List<Booking> bookingList = _bookings.GetBookings(BookingsFilePath);
             var tempBook = bookingList.SingleOrDefault(book => book.BookingNumber == bookingId);
             if (tempBook != null)
             {
                 tempBook.Class = classs;
-                _bookings.SaveBookings(bookingList);
+                _bookings.SaveBookings(bookingList,BookingsFilePath);
                 Console.WriteLine($@"class changes to {classs} successfully.");
             }
             else
