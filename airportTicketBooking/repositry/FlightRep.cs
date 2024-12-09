@@ -8,7 +8,7 @@ using CsvHelper.Configuration;
 
 namespace airportTicketBooking.repositry
 {
-    public class FlightRep
+    public class FlightRep:IFlightRep
     {
         private IFileWrapper _fileWrapper;
         public FlightRep(IFileWrapper fileWrapper)

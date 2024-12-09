@@ -15,7 +15,7 @@ namespace airportTicketBooking.repositry
         {
             _fileWrapper = fileWrapper;
         }
-        public List<Booking> GetBookings(string BookingsFilePath)
+        public virtual List<Booking> GetBookings(string BookingsFilePath)
         {
             if (!_fileWrapper.Exists(BookingsFilePath)) 
                 throw new FileNotFoundException($"File not found");

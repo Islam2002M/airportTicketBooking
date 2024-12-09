@@ -7,9 +7,10 @@ namespace airportTicketBooking
 {
     public class ManageFlights
     {
-        private readonly FlightRep _flights;
+        
+        private readonly IFlightRep _flights;
 
-        public ManageFlights(FlightRep flights)
+        public ManageFlights(IFlightRep flights)
         {
             _flights=flights;
         }
