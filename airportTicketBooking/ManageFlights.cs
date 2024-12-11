@@ -5,7 +5,7 @@ using airportTicketBooking.repositry;
 
 namespace airportTicketBooking
 {
-    public class ManageFlights
+    public class ManageFlights:IManageFlights
     {
         
         private readonly IFlightRep _flights;
@@ -31,10 +31,20 @@ namespace airportTicketBooking
         }
 
 
-        public Flight GetFlightById(int flightId)
+        public List<Flight> GetAllFlights()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual Flight GetFlightById(int flightId)
         {
             var f = _flights.GetFlights(@"C:\Users\msi\RiderProjects\airportTicketBooking\airportTicketBooking\data\flights.csv");
             return f.FirstOrDefault(ele => ele.FlightNumber == flightId);
+        }
+
+        public bool BookFlight(int flightId, int bookingId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

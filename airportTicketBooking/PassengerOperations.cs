@@ -8,8 +8,10 @@ namespace airportTicketBooking
     {
         static FileWrapper fileWrapper = new FileWrapper();
         static FlightRep flightRep = new FlightRep(fileWrapper);
+        private static readonly IManageBookings _bookings;  
+        private static readonly ManageFlights _manageFlights;
         
-        private readonly ManageBookings manageBookings = new();
+        private readonly ManageBookings manageBookings = new(_bookings,_manageFlights);
         private readonly ManageFlights manageFlights = new(flightRep);
         private int bookingId;
 

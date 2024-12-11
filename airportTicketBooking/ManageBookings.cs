@@ -6,14 +6,18 @@ using airportTicketBooking.repositry;
 
 namespace airportTicketBooking
 {
-    public class ManageBookings
+    public class ManageBookings:IManageBookings
     {
-        static FileWrapper fileWrapper = new FileWrapper();
-        static FlightRep flightRep = new FlightRep(fileWrapper);
-        private readonly BookingRep _bookings = new BookingRep(fileWrapper);
-        private readonly ManageFlights _manageFlights = new ManageFlights(flightRep);
+        private readonly IManageBookings _bookings;  
+        private readonly IManageFlights _manageFlights;
         private const string BookingsFilePath = @"C:\Users\msi\RiderProjects\airportTicketBooking\airportTicketBooking\data\booking.csv";
 
+        public ManageBookings(IManageBookings bookings, IManageFlights manageFlights)
+        {
+            _bookings = bookings;
+            _manageFlights = manageFlights;
+        }
+        
 
         public List<Booking> FilterBookings(int? flightId, decimal? price, string departureCountry,
             string destinationCountry, DateTime? departureDate, string departureAirport, string arrivalAirport,
@@ -38,15 +42,15 @@ namespace airportTicketBooking
                 (string.Equals(book.Class, @class, StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(@class))
             ).ToList();
         }
+    
 
         public List<Booking> ViewPersonalBookings(int passengerId)
         {
-            List<Booking> bookingList = _bookings.GetBookings(BookingsFilePath);
+            List<Booking> bookingList = _bookings.GetBookings("dummy-path");
             var personalBookings = bookingList.Where(booking => booking.PassengerId == passengerId).ToList();
             Console.WriteLine($"Found {personalBookings.Count} bookings for Passenger ID: {passengerId}");
             return personalBookings;
         }
-
         public void CancelBooking(int bookingId)
         {
             List<Booking> bookingList = _bookings.GetBookings(BookingsFilePath);
@@ -54,16 +58,17 @@ namespace airportTicketBooking
             if (tempBook != null)
             {
                 tempBook.Status = "Canceled";
-                _bookings.SaveBookings(bookingList,BookingsFilePath);
+                _bookings.SaveBookings(bookingList, BookingsFilePath);
                 Console.WriteLine("Booking canceled");
             }
             else
             {
                 Console.WriteLine("Booking not found");
             }
+        
         }
 
-        public bool BookAFlight(int flightId, string @class, int passengerId)
+        public  bool BookAFlight(int flightId, string @class, int passengerId)
         {
             var flight = _manageFlights.GetFlightById(flightId);
             if (flight == null)
@@ -123,18 +128,34 @@ namespace airportTicketBooking
 
         public void ChangeBookingType(int bookingId, string classs)
         {
+            // Fetch the booking list (in actual code, it would read from a file, in tests, this is mocked)
             List<Booking> bookingList = _bookings.GetBookings(BookingsFilePath);
+    
+            // Find the booking by its ID
             var tempBook = bookingList.SingleOrDefault(book => book.BookingNumber == bookingId);
+    
+            // If the booking is found, update its class and save the updated list
             if (tempBook != null)
             {
-                tempBook.Class = classs;
-                _bookings.SaveBookings(bookingList,BookingsFilePath);
-                Console.WriteLine($@"class changes to {classs} successfully.");
+                tempBook.Class = classs;  // Change the class
+                _bookings.SaveBookings(bookingList, BookingsFilePath);  // Save the updated list
+                Console.WriteLine($@"Class changed to {classs} successfully.");
             }
             else
             {
                 Console.WriteLine("Booking not found");
             }
+        }
+
+
+        public List<Booking> GetBookings(string filePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void  SaveBookings(List<Booking> bookings, string BookingsFilePath)
+        {
+            throw new NotImplementedException();
         }
     }
 }

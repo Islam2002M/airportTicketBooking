@@ -18,7 +18,7 @@ namespace airportTicketBooking.Tests
         }
 
         [Fact]
-        public void FilterFlights_ShouldReturnFilteredFlights_WhenCriteriaMatch()
+        public void FilterFlights_ShouldReturnFilteredFlightsMatched()
         {
             var flights = new List<Flight>
             {
@@ -41,7 +41,7 @@ namespace airportTicketBooking.Tests
                     DepartureCountry = "USA",
                     ArrivalCountry = "UAE",
                     Class = "Business",
-                    Price = 500, 
+                    Price = 500,
                     DepartureDate = new DateTime(2024, 12, 25)
                 }
             };
@@ -83,7 +83,7 @@ namespace airportTicketBooking.Tests
         {
             var flights = new List<Flight>
             {
-                new Flight { FlightNumber = 1, DepartureAirport = "JFK", ArrivalAirport = "LAX" }
+                new() { FlightNumber = 1, DepartureAirport = "JFK", ArrivalAirport = "LAX" }
             };
 
             _mockFlightRep.Setup(repo => repo.GetFlights(It.IsAny<string>())).Returns(flights);
@@ -92,6 +92,5 @@ namespace airportTicketBooking.Tests
 
             Assert.Null(result);
         }
-
     }
 }

@@ -5,8 +5,9 @@ namespace airportTicketBooking
 {
     public class ManagerOperations : IUserOperations
     {
-        
-        private readonly ManageBookings manageBookings = new();
+        private static readonly IManageBookings _bookings;  
+        private static readonly ManageFlights _manageFlights;
+        private readonly ManageBookings manageBookings = new(_bookings,_manageFlights);
         private readonly ValidateFileRecords validateFileRecords = new();
 
         public void List()

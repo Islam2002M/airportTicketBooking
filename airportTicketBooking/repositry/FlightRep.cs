@@ -10,7 +10,7 @@ namespace airportTicketBooking.repositry
 {
     public class FlightRep:IFlightRep
     {
-        private IFileWrapper _fileWrapper;
+        private readonly IFileWrapper _fileWrapper;
         public FlightRep(IFileWrapper fileWrapper)
         {
             _fileWrapper = fileWrapper;
